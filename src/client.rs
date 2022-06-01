@@ -24,6 +24,8 @@ use crate::{
     stream::{Mode, NoDelay},
 };
 
+use std::time::Duration;
+
 /// Connect to the given WebSocket in blocking mode.
 ///
 /// Uses a websocket configuration passed as an argument to the function. Calling it with `None` is
