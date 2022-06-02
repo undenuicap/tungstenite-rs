@@ -25,6 +25,7 @@ use crate::{
 };
 
 use std::time::Duration;
+use std::env;
 
 /// Connect to the given WebSocket in blocking mode.
 ///
@@ -62,7 +63,9 @@ pub fn connect_with_config<Req: IntoClientRequest>(
         });
         let addrs = (host, port).to_socket_addrs()?;
         let mut stream = connect_to_some(addrs.as_slice(), request.uri())?;
-        stream.set_read_timeout(Some(Duration::from_millis(5000))); // cm
+        if env::consts::OS == "macos" {
+            stream.set_read_timeout(Some(Duration::from_millis(5000))); // cm
+        }
         NoDelay::set_nodelay(&mut stream, true)?;
 
         #[cfg(not(any(feature = "native-tls", feature = "__rustls-tls")))]
